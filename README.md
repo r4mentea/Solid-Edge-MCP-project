@@ -22,10 +22,11 @@ This repository records structured tests of AI-assisted operations in Siemens So
 - Local development environment: Complete
 - Upstream repository cloned and dependencies installed: Complete
 - Python environment and pytest discovery checks: Passed (TC-001)
-- ChatGPT-to-MCP connection: Pending
-- Solid Edge MCP operation testing: Not started
-- Operation tests executed: 0
-- Errors recorded: 0
+- Claude Desktop-to-MCP connection: Passed (TC-002)
+- MCP-to-Solid-Edge connection: Passed (TC-003)
+- Solid Edge MCP operation testing: Started (blank part create, diagnose and close)
+- Tests executed: 9 (6 passed, 1 failed, 2 inconclusive)
+- Errors recorded: 3 (all low severity)
 
 See [Testing/Test_Plan.md](Testing/Test_Plan.md) and [Testing/Test_Results.md](Testing/Test_Results.md).
 
