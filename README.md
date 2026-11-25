@@ -19,10 +19,12 @@ This repository records structured tests of AI-assisted operations in Siemens So
 6. Do not modify the upstream server repository as part of routine testing.
 
 ## Current status
-- Environment setup: Pending
+- Local development environment: Complete
+- Upstream repository cloned and dependencies installed: Complete
+- Python environment and pytest discovery checks: Passed (TC-001)
 - ChatGPT-to-MCP connection: Pending
-- Solid Edge operation testing: Not started
-- Tests executed: 0
+- Solid Edge MCP operation testing: Not started
+- Operation tests executed: 0
 - Errors recorded: 0
 
 See [Testing/Test_Plan.md](Testing/Test_Plan.md) and [Testing/Test_Results.md](Testing/Test_Results.md).
