@@ -38,8 +38,8 @@ A success response alone is insufficient; inspect the model to verify the result
 - Environment / setup — Python, dependencies, permissions, configuration, or installation problem.
 
 ## Planned test phases
-1. Environment setup and dependency verification.
-2. MCP connection and Solid Edge connection.
+1. Environment setup and dependency verification. **Completed for local prerequisites; recorded as TC-001.**
+2. MCP client connection and Solid Edge connection.
 3. Document lifecycle: create, open, save, close.
 4. Sketch creation and geometry.
 5. Part features: extrude, cut, hole, fillet, chamfer, patterns, and other available operations.
@@ -60,4 +60,4 @@ This is a plan, not a claim that every listed operation is supported.
 - Avoid broad or destructive tests until basic connection and recovery are understood.
 
 ## Current status
-No Solid Edge MCP operation tests have been executed. Setup and connection checks are pending.
+Local development tools, the upstream repository clone, dependency installation, Python version check, and pytest test discovery are complete. No Solid Edge MCP operation tests have been executed. Client connection and Solid Edge COM connectivity remain to be tested.
