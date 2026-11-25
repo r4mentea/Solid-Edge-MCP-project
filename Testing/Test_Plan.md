@@ -33,13 +33,13 @@ A success response alone is insufficient; inspect the model to verify the result
 - Input validation — Parameters are missing, invalid, or outside accepted bounds.
 - Model dependency — Model or document does not meet operation prerequisites.
 - COM / Solid Edge API — Automation or application-level failure.
-- MCP connection — ChatGPT/client cannot reach or communicate with the server.
+- MCP connection — Claude Desktop (or other client) cannot reach or communicate with the server.
 - Unexpected behaviour — Operation completes but produces an incorrect result.
 - Environment / setup — Python, dependencies, permissions, configuration, or installation problem.
 
 ## Planned test phases
 1. Environment setup and dependency verification. **Completed for local prerequisites; recorded as TC-001.**
-2. MCP client connection and Solid Edge connection.
+2. MCP client connection and Solid Edge connection. **Completed; recorded as TC-002 and TC-003.**
 3. Document lifecycle: create, open, save, close.
 4. Sketch creation and geometry.
 5. Part features: extrude, cut, hole, fillet, chamfer, patterns, and other available operations.
@@ -60,4 +60,4 @@ This is a plan, not a claim that every listed operation is supported.
 - Avoid broad or destructive tests until basic connection and recovery are understood.
 
 ## Current status
-Local development tools, the upstream repository clone, dependency installation, Python version check, and pytest test discovery are complete. No Solid Edge MCP operation tests have been executed. Client connection and Solid Edge COM connectivity remain to be tested.
+Local development tools, the upstream repository clone, dependency installation, Python version check, and pytest test discovery are complete. Claude Desktop connects to the server and to Solid Edge (TC-002, TC-003). Early document tests (create, diagnose, close) have been run (TC-004 to TC-009). Next: document saving and opening, then sketches (phases 3 and 4).
