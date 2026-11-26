@@ -28,7 +28,7 @@ Other observations concern diagnostic behaviour, window activation feedback, and
 
 ### FLAW-001 — Component colour cannot be read for matching
 
-<badge color="danger">P1 — High</badge> <badge color="warning">Confirmed capability gap</badge>
+**P1 — High | Confirmed exposed-tool capability gap**
 
 **What was requested**
 
@@ -78,7 +78,7 @@ Ask the tester to inspect the reference colour in Solid Edge and supply its RGB 
 
 ### FLAW-002 — Diagnostics fail when no document is open
 
-<badge color="warning">P2 — Medium</badge> <badge color="success">Behaviour confirmed</badge>
+**P2 — Medium | Behaviour confirmed**
 
 **What happened**
 
@@ -114,7 +114,7 @@ Open a document before calling `diagnose_api`.
 
 ### FLAW-003 — Window activation reports success without confirmed foreground focus
 
-<badge color="warning">P2 — Medium</badge> <badge color="warning">Under investigation</badge>
+**P2 — Medium | Under investigation**
 
 **What happened**
 
@@ -155,7 +155,7 @@ Manually click the Solid Edge taskbar icon.
 
 ### FLAW-004 — Open-document information is not available as a tool in the tested client workflow
 
-<badge color="warning">P2 — Medium</badge> <badge color="warning">Interoperability gap</badge>
+**P2 — Medium | Interoperability gap**
 
 **What happened**
 
@@ -190,7 +190,7 @@ Use a client that supports MCP resource reading, or have the user provide the op
 
 ### FLAW-005 — Visual verification was dependent on the human tester
 
-<badge color="info">P3 — Low</badge> <badge color="warning">Needs capability-inventory check</badge>
+**P3 — Low | Needs capability-inventory check**
 
 **What happened**
 
