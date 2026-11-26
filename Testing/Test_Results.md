@@ -5,12 +5,12 @@ Running record of executed scenarios. Keep Test IDs unique.
 ## Summary
 | Metric | Count |
 |---|---:|
-| Tests executed | 9 |
-| Passed | 6 |
+| Tests executed | 11 |
+| Passed | 7 |
 | Failed | 1 |
-| Blocked | 0 |
+| Blocked | 1 |
 | Inconclusive | 2 |
-| Errors logged | 3 |
+| Errors logged | 4 |
 
 ## Test register
 | Test ID | Date | Scenario | MCP tool(s) | Outcome | Error reference |
@@ -24,6 +24,8 @@ Running record of executed scenarios. Keep Test IDs unique.
 | TC-007 | 2026-11-25 | diagnose_api with a blank part open (retest of TC-004) | diagnose_api | PASS | None |
 | TC-008 | 2026-11-25 | Close the test part without saving | close_document | PASS | None |
 | TC-009 | 2026-11-25 | Tools, prompts and resources visible in Claude Desktop | None (client menus) | INCONCLUSIVE | None |
+| TC-010 | 2026-11-26 | Change assembly component color (tube, brown to yellow) | open_document, query_component, set_component_appearance | PASS | None |
+| TC-011 | 2026-11-26 | Match tube color to oilsprt.asm | query_component, diagnose_api, set_component_appearance | BLOCKED | ERR-004 |
 
 ## Test entry template
 ### TC-XXX — Short scenario title
@@ -171,3 +173,33 @@ Environment for TC-002 to TC-009: Windows 11; Solid Edge 2026 build 226.00.08.04
 - **Error reference:** None.
 - **Evidence:** User observation; upstream source at commit 49384d0.
 - **Notes / suggestion:** The open-document list is offered as MCP resources (`solidedge://document/list`, `solidedge://document/count`, `solidedge://document/active-type`), not as a tool, and no resource-reading tool was available to the assistant in this chat. An AI that only uses tools would miss this information. See SG-003.
+
+---
+
+Environment for TC-010 and TC-011: as for TC-002 to TC-009. Neither test saved anything; the assembly file on disk is unchanged.
+
+## TC-010: Change assembly component color (tube, brown to yellow)
+- **Date:** 2026-11-26
+- **Test area:** Assembly / appearance
+- **Preconditions / test model:** Solid Edge training assembly `seaabtb_yc.asm` from the Solid Edge 2026 install folder (`C:\Program Files\Siemens\Solid Edge 2026\Training\seaabtb_yc.asm`).
+- **User request:** Change the color of the tube in the assembly from brown to yellow.
+- **MCP tool(s):** open_document, query_component, set_component_appearance
+- **Expected result:** The tube component turns yellow.
+- **Actual result:** `open_document` opened the file (type Assembly). `query_component` (list) found `Tube 1.par:1` at index 2, and `is_tube` returned true. `set_component_appearance` with color 255, 255, 0 on index 2 returned `updated`, `#ffff00`, style `MCP FFFF00`. A follow-up `query_component` style read returned `MCP FFFF00` (it was empty before).
+- **Outcome:** PASS
+- **Error reference:** None.
+- **Evidence:** Tool responses above, the follow-up style read, and the user's visual confirmation that the tube is yellow.
+- **Notes / suggestion:** Not saved; the file on disk is unchanged. The assistant cannot see the Solid Edge window, so the visual check depended on the tester. See SG-006.
+
+## TC-011: Match tube color to oilsprt.asm
+- **Date:** 2026-11-26
+- **Test area:** Assembly / appearance
+- **Preconditions / test model:** Same open assembly as TC-010 (`seaabtb_yc.asm`), tube already set to yellow. The component `oilsprt.asm:1` is at index 1.
+- **User request:** Make the tube the same color as `oilsprt.asm`.
+- **MCP tool(s):** query_component, diagnose_api, set_component_appearance
+- **Expected result:** The color of `oilsprt.asm` is read and applied to the tube.
+- **Actual result:** `query_component` on index 1 with `style` (empty), `face_style` (null), `bodies` (0 bodies), `info`, `tree` and `sub_occurrences` (9 child parts) returned no color data. `diagnose_api` inspects only the connection and collections. As a trial, the tube was set to gold 255, 215, 0 (`MCP FFD700`), which is an estimate and not a measured match.
+- **Outcome:** BLOCKED (the color cannot be read, so a match cannot be made or verified programmatically)
+- **Error reference:** ERR-004
+- **Evidence:** The user said `oilsprt` is a different shade of yellow, maybe gold. The user has not yet confirmed whether the gold trial matches.
+- **Notes / suggestion:** Next step: the user supplies the RGB value read from Solid Edge, or a screenshot, then the test is repeated. See SG-005.
