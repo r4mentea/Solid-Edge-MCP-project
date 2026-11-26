@@ -1,67 +1,30 @@
 # Test Plan
 
 ## Objective
-Evaluate the SolidEdge-MCP server in a controlled and repeatable way. Identify supported capabilities, operating conditions, expected limitations, unexpected failures, and improvement opportunities.
+Test whether SolidEdge-MCP can create, modify, inspect and verify CAD models reliably.
 
-## Test record fields
-| Field | Description |
-|---|---|
-| Test ID | Unique identifier, e.g. TC-001 |
-| Date | Date run |
-| Test area | Connection, document, sketch, feature, assembly, etc. |
-| Scenario | User request and operation |
-| Preconditions | Required document, geometry, selections, and application state |
-| MCP tool(s) | Tool names invoked, where known |
-| Expected result | Intended behaviour |
-| Actual result | What Solid Edge and the MCP server did |
-| Outcome | PASS, FAIL, BLOCKED, or INCONCLUSIVE |
-| Error reference | Related entry in Error_Log.md |
-| Evidence | Exact error text, screenshots, logs, or model observations |
-| Notes / suggestion | Workaround or improvement idea |
+## Test phases
+1. Environment and dependencies — complete.
+2. MCP and Solid Edge connections — complete.
+3. Document lifecycle — started; create and close tested.
+4. Sketches and geometry.
+5. Part features.
+6. Sheet metal.
+7. Assemblies.
+8. Drafting and export.
+9. Invalid inputs, limits and recovery.
+10. Overall capability assessment.
 
-## Outcome definitions
-- **PASS** — Operation completed and resulting CAD state was verified.
-- **FAIL** — Operation did not meet the expected result.
-- **BLOCKED** — Testing could not proceed due to a prerequisite, access, connection, or environment issue.
-- **INCONCLUSIVE** — Result could not be verified or evidence was insufficient.
+Planned operations are not claims of support.
 
-A success response alone is insufficient; inspect the model to verify the result.
+## Test outcomes
+- **PASS** — Result achieved and verified in Solid Edge.
+- **FAIL** — Operation attempted but expected result not achieved.
+- **BLOCKED** — A prerequisite prevented the test.
+- **INCONCLUSIVE** — Evidence was insufficient to decide.
 
-## Failure classification
-- Expected limitation — Server intentionally refuses a documented unsupported operation.
-- Functional failure — A supported operation fails unexpectedly.
-- Input validation — Parameters are missing, invalid, or outside accepted bounds.
-- Model dependency — Model or document does not meet operation prerequisites.
-- COM / Solid Edge API — Automation or application-level failure.
-- MCP connection — Claude Desktop (or other client) cannot reach or communicate with the server.
-- Unexpected behaviour — Operation completes but produces an incorrect result.
-- Environment / setup — Python, dependencies, permissions, configuration, or installation problem.
+## Test requirements
+Use test files or copies. Record the Solid Edge and server versions, tool responses, actual model result and relevant evidence. Preserve existing test IDs. Never treat a success response alone as proof of a correct model.
 
-## Planned test phases
-1. Environment setup and dependency verification. **Completed for local prerequisites; recorded as TC-001.**
-2. MCP client connection and Solid Edge connection. **Completed; recorded as TC-002 and TC-003.**
-3. Document lifecycle: create, open, save, close.
-4. Sketch creation and geometry.
-5. Part features: extrude, cut, hole, fillet, chamfer, patterns, and other available operations.
-6. Sheet-metal workflows.
-7. Assembly workflows.
-8. Drafting and export workflows.
-9. Limit tests: invalid inputs, missing references, unusual dimensions, repeated calls, and unsupported cases.
-10. Final capability and reliability assessment.
-
-This is a plan, not a claim that every listed operation is supported.
-
-## Safety and repeatability
-- Use dedicated test files or copies; do not begin with important production models.
-- Record Solid Edge version, server version/commit, and environment details.
-- Change one main variable at a time when investigating a failure.
-- Preserve exact error messages and logs.
-- Inspect the model after modifying operations.
-- Avoid broad or destructive tests until basic connection and recovery are understood.
-
-## Current status
-Local development tools, the upstream repository clone, dependency installation, Python version check, and pytest test discovery are complete. Claude Desktop connects to the server and to Solid Edge (TC-002, TC-003). Early document tests (create, diagnose, close) have been run (TC-004 to TC-009). Next: document saving and opening, then sketches (phases 3 and 4).
-
-## Planned follow-ups
-- Retest "match component color" (TC-011) once an RGB value read from Solid Edge is supplied.
-- Try part-level and face-level color tools if a component-level color is overridden.
+## Current next steps
+Continue with document save/open tests, then sketch and part-feature operations. Revisit TC-011 when the reference colour can be read or the user supplies its RGB value.
