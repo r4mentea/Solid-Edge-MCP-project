@@ -61,3 +61,7 @@ This is a plan, not a claim that every listed operation is supported.
 
 ## Current status
 Local development tools, the upstream repository clone, dependency installation, Python version check, and pytest test discovery are complete. Claude Desktop connects to the server and to Solid Edge (TC-002, TC-003). Early document tests (create, diagnose, close) have been run (TC-004 to TC-009). Next: document saving and opening, then sketches (phases 3 and 4).
+
+## Planned follow-ups
+- Retest "match component color" (TC-011) once an RGB value read from Solid Edge is supplied.
+- Try part-level and face-level color tools if a component-level color is overridden.
