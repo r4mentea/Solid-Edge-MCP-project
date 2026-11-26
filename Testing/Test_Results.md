@@ -1,205 +1,66 @@
 # Test Results
 
-Running record of executed scenarios. Keep Test IDs unique.
-
 ## Summary
-| Metric | Count |
+| Outcome | Count |
 |---|---:|
-| Tests executed | 11 |
-| Passed | 7 |
-| Failed | 1 |
-| Blocked | 1 |
-| Inconclusive | 2 |
-| Errors logged | 4 |
+| PASS | 7 |
+| FAIL | 1 |
+| BLOCKED | 1 |
+| INCONCLUSIVE | 2 |
+| **Total** | **11** |
 
 ## Test register
-| Test ID | Date | Scenario | MCP tool(s) | Outcome | Error reference |
-|---|---|---|---|---|---|
-| TC-001 | 2026-11-25 | Local Python environment and test-discovery verification | None (local commands) | PASS | None |
-| TC-002 | 2026-11-25 | MCP client connection (Claude Desktop to solidedge server) | manage_connection | PASS | ERR-003 |
-| TC-003 | 2026-11-25 | Solid Edge COM connection without launching a new instance | manage_connection (connect) | PASS | None |
-| TC-004 | 2026-11-25 | diagnose_api with no document open | diagnose_api | FAIL | ERR-001 |
-| TC-005 | 2026-11-25 | Bring Solid Edge window to the front | manage_connection (activate) | INCONCLUSIVE | ERR-002 |
-| TC-006 | 2026-11-25 | Create a blank part document | create_document | PASS | None |
-| TC-007 | 2026-11-25 | diagnose_api with a blank part open (retest of TC-004) | diagnose_api | PASS | None |
-| TC-008 | 2026-11-25 | Close the test part without saving | close_document | PASS | None |
-| TC-009 | 2026-11-25 | Tools, prompts and resources visible in Claude Desktop | None (client menus) | INCONCLUSIVE | None |
-| TC-010 | 2026-11-26 | Change assembly component color (tube, brown to yellow) | open_document, query_component, set_component_appearance | PASS | None |
-| TC-011 | 2026-11-26 | Match tube color to oilsprt.asm | query_component, diagnose_api, set_component_appearance | BLOCKED | ERR-004 |
+| ID | Date | Test | Result | Error |
+|---|---|---|---|---|
+| TC-001 | 2026-11-25 | Python environment and pytest discovery | PASS | — |
+| TC-002 | 2026-11-25 | Claude Desktop to MCP server | PASS | ERR-003 |
+| TC-003 | 2026-11-25 | MCP connection to running Solid Edge | PASS | — |
+| TC-004 | 2026-11-25 | diagnose_api with no document open | FAIL | ERR-001 |
+| TC-005 | 2026-11-25 | Bring Solid Edge window to foreground | INCONCLUSIVE | ERR-002 |
+| TC-006 | 2026-11-25 | Create blank part | PASS | — |
+| TC-007 | 2026-11-25 | diagnose_api with blank part open | PASS | — |
+| TC-008 | 2026-11-25 | Close blank part without saving | PASS | — |
+| TC-009 | 2026-11-25 | Tools, prompts and resources visibility | INCONCLUSIVE | — |
+| TC-010 | 2026-11-26 | Change assembly tube colour to yellow | PASS | — |
+| TC-011 | 2026-11-26 | Match tube colour to reference component | BLOCKED | ERR-004 |
 
-## Test entry template
-### TC-XXX — Short scenario title
-- **Date:**
-- **Test area:**
-- **Preconditions / test model:**
-- **User request:**
-- **MCP tool(s):**
-- **Expected result:**
-- **Actual result:**
-- **Outcome:** PASS / FAIL / BLOCKED / INCONCLUSIVE
-- **Error reference:** None / ERR-XXX
-- **Evidence:** Screenshot, log, or supporting file
-- **Notes / suggestion:**
+## Test details
 
----
+### TC-001 — Environment check
+Windows 11 environment prepared. `uv sync --all-extras` completed; Python 3.11.9 verified; `uv run pytest --collect-only -q` completed. Tests were collected, not executed. Evidence: user-confirmed command results.
 
-## TC-000 — Initial environment and MCP connection checkpoint
-- **Date:** 2026-11-24
-- **Test area:** Environment and connection
-- **Expected result:** Required software is installed; ChatGPT can reach the MCP server; the server can communicate with Solid Edge.
-- **Actual result:** Local development tools and dependencies are now installed and verified. ChatGPT-to-MCP and MCP-to-Solid-Edge connections have not yet been tested.
-- **Outcome:** BLOCKED — connection setup remains outstanding.
-- **Error reference:** None.
-- **Notes:** Tracking checkpoint only, not a failed operation test. ChatGPT Free plan compatibility and the available connection route must be established before operation testing.
-- **Update (2026-11-25):** Superseded by TC-002 and TC-003, both PASS. The project now uses Claude Desktop as the MCP client instead of ChatGPT.
+### TC-002 — MCP client connection
+Claude Desktop launched the local `solidedge` server. It appeared as running after a full quit and restart. First restart did not show it. See ERR-003.
 
-## TC-001 — Local Python environment and test-discovery verification
-- **Date:** 2026-11-25
-- **Test area:** Environment / setup
-- **Preconditions / test model:** Windows 11; upstream SolidEdge-MCP repository cloned locally; dependency installation completed with `uv sync --all-extras`.
-- **User request:** Verify that the project environment uses the expected Python version and that its test suite can be discovered.
-- **MCP tool(s):** None. Local PowerShell commands only.
-- **Expected result:** The project runs under Python 3.11.9 and pytest can collect the project's tests without executing them.
-- **Actual result:** `uv run python --version` returned Python 3.11.9. `uv run pytest --collect-only -q` completed successfully, according to the user. The user also confirmed that `.venv` exists and `uv sync --all-extras` completed successfully.
-- **Outcome:** PASS
-- **Error reference:** None. No errors reported.
-- **Evidence:** User-confirmed command results; exact pytest collection output was not retained.
-- **Notes / suggestion:** Environment is ready for the next stage: investigate the available MCP client connection route, then verify Solid Edge connectivity. Test collection does not mean the test suite itself has been executed.
+### TC-003 — Solid Edge connection
+Connected to the running Solid Edge 2026 instance without launching another instance or changing documents. Response reported build `226.00.08.04`; user confirmed the version.
 
----
+### TC-004 — diagnose_api without a document
+Returned `{"error":"No active document"}`. Retested successfully with a blank part in TC-007. See ERR-001.
 
-Environment for TC-002 to TC-009: Windows 11; Solid Edge 2026 build 226.00.08.04; server `master` at commit 49384d0 (merge of upstream PR #4); Python 3.11.9; client Claude Desktop 6.28899.6. Each tool call was approved with "Allow once".
+### TC-005 — Window activation
+Tool returned `{"status":"activated"}`, but the user saw only a taskbar flash; the window did not come forward. Result remains inconclusive. See ERR-002.
 
-## TC-002: MCP client connection (Claude Desktop to the solidedge server)
-- **Date:** 2026-11-25
-- **Test area:** Connection
-- **Preconditions / test model:** Server first run standalone with `uv --directory "%USERPROFILE%\GitHub\SolidEdge-MCP" run solidedge-mcp` (started, FastMCP banner shown, `git status --short` empty before and after). A `solidedge` entry was then added to `claude_desktop_config.json` and Claude Desktop was fully quit and restarted.
-- **User request:** Have Claude Desktop launch the local server and make a tool call through it.
-- **MCP tool(s):** manage_connection (see TC-003)
-- **Expected result:** The server appears under Local MCP servers with a running status and its tools can be called.
-- **Actual result:** After the first restart the server was not listed. After re-checking the saved file and doing a full quit and restart, `solidedge` was listed with status "running" (user report) and tool calls succeeded.
-- **Outcome:** PASS
-- **Error reference:** ERR-003 (setup issue on the way to this result)
-- **Evidence:** User report of the "running" status; successful tool calls in TC-003 and later tests; the assistant's tool search listed 119 solidedge tools.
-- **Notes / suggestion:** This Claude Desktop install had no Developer tab. The Local MCP servers section (with an Edit config button) is on the Extensions page under Desktop app. Edit config opened a folder under `%LOCALAPPDATA%\Claude-Data\`, not the `%APPDATA%\Claude` path shown in public MCP documentation. A full path to `uv.exe` was used in the config.
+### TC-006 — Create blank part
+`create_document` returned Part1. User confirmed the blank part opened and no other documents were affected.
 
-## TC-003: Solid Edge COM connection without launching a new instance
-- **Date:** 2026-11-25
-- **Test area:** Connection
-- **Preconditions / test model:** Solid Edge 2026 already running, no documents open.
-- **User request:** Connect to Solid Edge, do not start it if not running, change nothing, report the version.
-- **MCP tool(s):** manage_connection with `action: connect`, `start_if_needed: false`
-- **Expected result:** Connection to the running instance and a version report, with no document changes.
-- **Actual result:** `{"status":"connected","version":"226.00.08.04","visible":true,"caption":"Solid Edge 2026"}`
-- **Outcome:** PASS
-- **Error reference:** None.
-- **Evidence:** Exact response above. The user confirmed in Solid Edge Help > About that the version matches 226.00.08.04.
-- **Notes / suggestion:** The upstream documentation reports its own testing on build 226.00.01.04, so this build differs from the author's. Keep this in mind when comparing results.
+### TC-007 — diagnose_api with a document
+Returned diagnostic data with a blank part open. Output included verbose Python internals and `CDispatch`.
 
-## TC-004: diagnose_api with no document open
-- **Date:** 2026-11-25
-- **Test area:** Connection / diagnostics
-- **Preconditions / test model:** Connected to Solid Edge; no document open.
-- **User request:** Inspect the COM connection and active document.
-- **MCP tool(s):** diagnose_api
-- **Expected result:** Diagnostic information about the connection and the active document.
-- **Actual result:** `{"error":"No active document"}`
-- **Outcome:** FAIL
-- **Error reference:** ERR-001
-- **Evidence:** Exact response above.
-- **Notes / suggestion:** Classified as Model dependency (a document is a prerequisite). Retested with a document open in TC-007. See SG-001.
+### TC-008 — Close blank part
+`close_document` returned `{"status":"closed","document":"Part1","saved":false}`. User confirmed Part1 closed.
 
-## TC-005: Bring Solid Edge window to the front
-- **Date:** 2026-11-25
-- **Test area:** Connection / window control
-- **Preconditions / test model:** Solid Edge running behind the Claude Desktop window; no documents open.
-- **User request:** Activate the Solid Edge window.
-- **MCP tool(s):** manage_connection with `action: activate`, `start_if_needed: false`
-- **Expected result:** The Solid Edge window comes to the front.
-- **Actual result:** `{"status":"activated"}` (run twice, identical). The user saw only a red flash on the Solid Edge taskbar icon; the window did not come to the front.
-- **Outcome:** INCONCLUSIVE
-- **Error reference:** ERR-002
-- **Evidence:** Exact response above; user observation of the taskbar flash.
-- **Notes / suggestion:** Possibly Windows focus rules, not confirmed. Workaround: click the taskbar icon. See SG-004.
+### TC-009 — Client capability visibility
+Tool search listed 119 tools; the client menu showed about 44 items; upstream source at commit `49384d0` defined 4 prompts. Resource visibility was not fully verified.
 
-## TC-006: Create a blank part document
-- **Date:** 2026-11-25
-- **Test area:** Document lifecycle
-- **Preconditions / test model:** Connected; no documents open. Permission to create one blank test part was given by the user.
-- **User request:** Create one blank test part, without saving.
-- **MCP tool(s):** create_document with `type: part`
-- **Expected result:** A new empty part document opens and becomes active.
-- **Actual result:** `{"status":"created","type":"Part","name":"Part1","path":"Part1"}`
-- **Outcome:** PASS
-- **Error reference:** None.
-- **Evidence:** Exact response above. The user verified a blank Part1 opened, no pop-ups appeared (other than the Claude "Allow once" permission prompt), and no other files were open.
-- **Notes / suggestion:** None.
+### TC-010 — Change tube colour
+In `seaabtb_yc.asm`, `Tube 1.par:1` was identified at index 2. `set_component_appearance` applied RGB 255,255,0 and returned `MCP FFFF00`. Follow-up query and user visual check confirmed yellow. Assembly was not saved.
 
-## TC-007: diagnose_api with a blank part open (retest of TC-004)
-- **Date:** 2026-11-25
-- **Test area:** Connection / diagnostics
-- **Preconditions / test model:** Blank Part1 open and active (from TC-006).
-- **User request:** Inspect the COM connection and active document.
-- **MCP tool(s):** diagnose_api
-- **Expected result:** Diagnostic information about the active document.
-- **Actual result:** Returned data instead of an error. It began `{"document_type":"CDispatch","available_collections":["Models","ProfileSets","Constructions","RefPlanes","Sketches"],...` followed by long lists of method names, including Python internals such as `__getattr__`.
-- **Outcome:** PASS
-- **Error reference:** None.
-- **Evidence:** The full output is in the Claude Desktop chat and was not copied here because it is very long.
-- **Notes / suggestion:** The output is verbose and `CDispatch` is not a meaningful document type for a user. See SG-002.
+### TC-011 — Match reference colour
+The reference `oilsprt.asm:1` was at index 1. Tested queries returned empty style, null face_style, zero bodies, and no colour through info/tree/sub-occurrences. Gold (255,215,0) was tried but not verified as a match. Blocked because the reference colour could not be read. See ERR-004.
 
-## TC-008: Close the test part without saving
-- **Date:** 2026-11-25
-- **Test area:** Document lifecycle
-- **Preconditions / test model:** Blank Part1 open; it was the only document open.
-- **User request:** Close the active document without saving.
-- **MCP tool(s):** close_document with `save: false`, `scope: active`
-- **Expected result:** Part1 closes with no save prompt and nothing is written to disk.
-- **Actual result:** `{"status":"closed","document":"Part1","saved":false}`
-- **Outcome:** PASS
-- **Error reference:** None.
-- **Evidence:** Exact response above; user confirmation that Part1 is no longer open.
-- **Notes / suggestion:** None.
+## Test environment
+TC-002 to TC-009: Windows 11, Solid Edge 2026 build 226.00.08.04, server commit `49384d0`, Python 3.11.9, Claude Desktop 6.28899.6.  
+TC-010 and TC-011 used the same environment and the Solid Edge training assembly. Neither test saved changes to the assembly file.
 
-## TC-009: Tools, prompts and resources visible in Claude Desktop
-- **Date:** 2026-11-25
-- **Test area:** Connection / capability discovery
-- **Preconditions / test model:** Server running in Claude Desktop (TC-002).
-- **User request:** Check which tools, prompts and resources Claude Desktop offers.
-- **MCP tool(s):** None (client menus and the assistant's tool search).
-- **Expected result:** About 119 tools, 53 resources and 4 prompts, as described in the upstream README.
-- **Actual result:** The assistant's tool search listed 119 solidedge tools. In the menu opened from the `>` arrow beside the Solid Edge panel, the user sees about 44 items, including items named "new part", "design review" and "sketch info". The user's earlier report of about 44 tools may refer to this same list; tools were not recounted separately. The upstream code at commit 49384d0 defines 4 prompts: new_part, design_review, manufacturability_check, troubleshoot_feature.
-- **Outcome:** INCONCLUSIVE
-- **Error reference:** None.
-- **Evidence:** User observation; upstream source at commit 49384d0.
-- **Notes / suggestion:** The open-document list is offered as MCP resources (`solidedge://document/list`, `solidedge://document/count`, `solidedge://document/active-type`), not as a tool, and no resource-reading tool was available to the assistant in this chat. An AI that only uses tools would miss this information. See SG-003.
-
----
-
-Environment for TC-010 and TC-011: as for TC-002 to TC-009. Neither test saved anything; the assembly file on disk is unchanged.
-
-## TC-010: Change assembly component color (tube, brown to yellow)
-- **Date:** 2026-11-26
-- **Test area:** Assembly / appearance
-- **Preconditions / test model:** Solid Edge training assembly `seaabtb_yc.asm` from the Solid Edge 2026 install folder (`C:\Program Files\Siemens\Solid Edge 2026\Training\seaabtb_yc.asm`).
-- **User request:** Change the color of the tube in the assembly from brown to yellow.
-- **MCP tool(s):** open_document, query_component, set_component_appearance
-- **Expected result:** The tube component turns yellow.
-- **Actual result:** `open_document` opened the file (type Assembly). `query_component` (list) found `Tube 1.par:1` at index 2, and `is_tube` returned true. `set_component_appearance` with color 255, 255, 0 on index 2 returned `updated`, `#ffff00`, style `MCP FFFF00`. A follow-up `query_component` style read returned `MCP FFFF00` (it was empty before).
-- **Outcome:** PASS
-- **Error reference:** None.
-- **Evidence:** Tool responses above, the follow-up style read, and the user's visual confirmation that the tube is yellow.
-- **Notes / suggestion:** Not saved; the file on disk is unchanged. The assistant cannot see the Solid Edge window, so the visual check depended on the tester. See SG-006.
-
-## TC-011: Match tube color to oilsprt.asm
-- **Date:** 2026-11-26
-- **Test area:** Assembly / appearance
-- **Preconditions / test model:** Same open assembly as TC-010 (`seaabtb_yc.asm`), tube already set to yellow. The component `oilsprt.asm:1` is at index 1.
-- **User request:** Make the tube the same color as `oilsprt.asm`.
-- **MCP tool(s):** query_component, diagnose_api, set_component_appearance
-- **Expected result:** The color of `oilsprt.asm` is read and applied to the tube.
-- **Actual result:** `query_component` on index 1 with `style` (empty), `face_style` (null), `bodies` (0 bodies), `info`, `tree` and `sub_occurrences` (9 child parts) returned no color data. `diagnose_api` inspects only the connection and collections. As a trial, the tube was set to gold 255, 215, 0 (`MCP FFD700`), which is an estimate and not a measured match.
-- **Outcome:** BLOCKED (the color cannot be read, so a match cannot be made or verified programmatically)
-- **Error reference:** ERR-004
-- **Evidence:** The user said `oilsprt` is a different shade of yellow, maybe gold. The user has not yet confirmed whether the gold trial matches.
-- **Notes / suggestion:** Next step: the user supplies the RGB value read from Solid Edge, or a screenshot, then the test is repeated. See SG-005.
+TC-000 was an initial setup checkpoint. It was superseded by TC-002 and TC-003 and is not included in the test count.
