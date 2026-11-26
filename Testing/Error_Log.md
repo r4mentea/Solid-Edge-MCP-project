@@ -3,7 +3,7 @@
 Record every observed error from setup, connection, tool execution, or model operations. Preserve the exact original message wherever possible.
 
 ## Summary
-Three entries recorded so far (ERR-001 to ERR-003). All are LOW severity. None involved a crash, data loss, or model change.
+Four entries recorded so far (ERR-001 to ERR-004). All are LOW severity. None involved a crash, data loss, or model change.
 
 ## Error categories
 - Expected limitation / unsupported operation
@@ -27,6 +27,7 @@ Three entries recorded so far (ERR-001 to ERR-003). All are LOW severity. None i
 | ERR-001 | TC-004 | Model dependency | Low | diagnose_api returns an error when no document is open | Expected limitation |
 | ERR-002 | TC-005 | Unexpected behaviour | Low | activate reports success but the window only flashes in the taskbar | Investigating |
 | ERR-003 | TC-002 | Environment / setup | Low | Server not listed in Local MCP servers after first restart | Workaround found |
+| ERR-004 | TC-011 | Expected limitation | Low | No tool can read the color of a component, body or face | Investigating |
 
 ## Error entry template
 ### ERR-XXX — Short error title
@@ -103,3 +104,20 @@ If the same underlying error appears in multiple tests, link each test to the re
 - **Workaround:** After re-checking the file and doing a full quit and restart of Claude Desktop, the server was listed with status "running". The exact cause was not isolated.
 - **Suggested improvement:** In setup documentation, tell users to fully quit Claude Desktop (tray icon, Quit) before restarting.
 - **Status:** Workaround found
+
+## ERR-004: No tool can read the color of a component, body or face
+- **Date:** 2026-11-26
+- **Related test ID:** TC-011
+- **Environment:** As for ERR-001 to ERR-003.
+- **MCP tool:** query_component
+- **Exact error message:** None. The responses were: `style` returned `""` for index 1; `face_style` returned `null` for index 1 and for the tube before any changes; `bodies` returned `{"component_index":1,"body_count":0,"bodies":[]}`.
+- **Steps to reproduce:** Open `seaabtb_yc.asm`, then call `query_component` on index 1 (`oilsprt.asm:1`) with `style`, `face_style` and `bodies`.
+- **Expected behaviour:** Color information (RGB or style name) for the component so that it can be matched.
+- **Actual behaviour:** No color data was returned by any of the query options tried.
+- **Category:** Expected limitation (missing read capability; cause not determined)
+- **Severity:** Low
+- **Model / document context:** Training assembly `seaabtb_yc.asm`, component `oilsprt.asm:1` (9 child parts).
+- **Evidence:** The tool responses above.
+- **Workaround:** The tester reads the RGB value in Solid Edge and supplies it.
+- **Suggested improvement:** See SG-005.
+- **Status:** Investigating. The color is likely set on the child parts, and the server appears to expose setters only, with no getter. This is not confirmed.
